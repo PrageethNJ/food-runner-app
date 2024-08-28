@@ -26,4 +26,11 @@ ________________________________________________________________________________
 11. Install Material Top Tabs navigator
 	npm install @react-navigation/material-top-tabs react-native-tab-view
 	npx expo install react-native-pager-view
-12.
+12. Install react query
+	npm i @tanstack/react-query
+13. Generate types based on database using supabase
+	npx supabase login
+	npx supabase gen types typescript --project-id jckirvvbfrcpqnqrjqgk > src/database.types.ts
+14. Install expo-file-system library to upload files.
+	npx expo install expo-file-system base64-arraybuffer
+
