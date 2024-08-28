@@ -12,8 +12,11 @@
 ____________________________________________________________________________________________________________________________
 
 6. copy folder src and tsconfig.jason file from test-super-base-app. then delete Auth and Account from components.
-7.  Install the supabase client library and dependencies
+7. Install the supabase client library and dependencies
 	npx expo install @supabase/supabase-js @react-native-async-storage/async-storage @rneui/themed react-native-url-polyfill
 _____________________________________________________________________________________________________________________________
 
- 8.
+8. Install expo crypto to generate unique uuid
+	npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar
+	npx expo install expo-crypto
+9. 
