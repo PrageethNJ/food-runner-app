@@ -33,4 +33,10 @@ ________________________________________________________________________________
 	npx supabase gen types typescript --project-id jckirvvbfrcpqnqrjqgk > src/database.types.ts
 14. Install expo-file-system library to upload files.
 	npx expo install expo-file-system base64-arraybuffer
+15. Install eas
+	npm install --global eas-cli
+	eas login
+16.
+	eas build:configure
+	eas build --platform android
 

@@ -18,7 +18,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.prageethnj.foodrunnerapp"
     },
     "scheme": "food-runner-app",
     "web": {
@@ -27,6 +28,14 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "edd307cf-d7a2-4184-a608-1be00dfeeff7"
+      }
+    }
   }
 }
