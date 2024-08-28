@@ -13,17 +13,7 @@ const UserPage = () => {
      return <Redirect href={'/sign-in'} />;
    }
 
-  return (
-    <View>
-      <Stack.Screen options={{ title: 'User Page' }} />
-      <Text>This is the User Page</Text>
-      
-      <Link href={'/(user)/profile'} asChild>
-        <Button text="Profile" />
-      </Link>
-      
-    </View>
-  )
+   return <Redirect href={'/menu/'} />;
 }
 
 export default UserPage
