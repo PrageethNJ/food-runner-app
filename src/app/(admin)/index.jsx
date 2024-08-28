@@ -12,24 +12,7 @@ const AdminPage = () => {
     return <Redirect href={'/sign-in'} />;
   }
 
- return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
-      <Stack.Screen options={{ title: 'Admin Page' }} />
-      
-      <Link href={'/(admin)'} asChild>
-        <Button text="Admin" />
-      </Link>
-
-      <Link href={'/(user)'} asChild>
-        <Button text="User" />
-      </Link>
-
-      <Link href={'/(admin)/profile'} asChild>
-        <Button text="Profile" />
-      </Link>
-
-    </View>
-  )
+  return <Redirect href={'/(admin)/menu/'} />;
 }
 
 export default AdminPage

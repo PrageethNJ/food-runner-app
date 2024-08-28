@@ -89,7 +89,7 @@ export default function Account() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Admin Profile' }} />
+      <Stack.Screen options={{ title: 'Profile' }} />
 
       <Text style={styles.label}>User Name</Text>
       <TextInput
