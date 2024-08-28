@@ -13,7 +13,7 @@ const UserPage = () => {
      return <Redirect href={'/sign-in'} />;
    }
 
-   return <Redirect href={'/menu/'} />;
+   return <Redirect href={'/(user)/menu/'} />;
 }
 
 export default UserPage
