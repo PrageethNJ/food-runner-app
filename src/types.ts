@@ -17,6 +17,10 @@ export type Enums<T extends keyof Database['public']['Enums']> =
    image: string | null;
    name: string;
    price: number;
+   price_s: number;
+   price_l: number;
+   price_xl: number;
+   description: string;
  };
 
 export type PizzaSize = 'S' | 'M' | 'L' | 'XL';
@@ -44,6 +48,8 @@ export type Order = {
   total: number;
   user_id: string;
   status: OrderStatus;
+  
+  schedule_time: string;
 
   order_items?: OrderItem[];
 };

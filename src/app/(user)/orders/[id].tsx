@@ -3,7 +3,7 @@ import { useUpdateOrderSubscription } from '@/api/orders/subscriptions';
 import OrderItemListItem from '@/components/OrderItemListItem';
 import OrderListItem from '@/components/OrderListItem';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, FlatList, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View,StyleSheet } from 'react-native';
 
 export default function OrderDetailsScreen() {
   const { id: idString } = useLocalSearchParams();
@@ -28,7 +28,25 @@ export default function OrderDetailsScreen() {
         renderItem={({ item }) => <OrderItemListItem item={item} />}
         contentContainerStyle={{ gap: 10 }}
         ListHeaderComponent={() => <OrderListItem order={order} />}
+        ListFooterComponent={() => (<><Text style={styles.descriptionText}>Total amount    :   Rs. {(order.total).toFixed(2)}</Text></>)}
       />
+      
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    color: '#333',
+    paddingHorizontal:5,
+  },
+  descriptionText: {
+    fontSize: 16,
+    color: '#666',
+    lineHeight: 24,
+    paddingHorizontal:10,
+  },
+});

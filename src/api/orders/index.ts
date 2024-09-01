@@ -3,6 +3,7 @@ import { useAuth } from '@/providers/AuthProvider';
 import { InsertTables, Tables, UpdateTables } from '@/types';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
+//for admin to get all the orders
 export const useAdminOrderList = ({ archived = false }) => {
   const statuses = archived ? ['Delivered'] : ['New', 'Cooking', 'Delivering'];
 
@@ -13,7 +14,8 @@ export const useAdminOrderList = ({ archived = false }) => {
         .from('orders')
         .select('*')
         .in('status', statuses)
-        .order('created_at', { ascending: false });
+        //.order('created_at', { ascending: true });
+        .order('schedule_time', { ascending: true }); //for sheduling
       if (error) {
         throw new Error(error.message);
       }
@@ -22,6 +24,7 @@ export const useAdminOrderList = ({ archived = false }) => {
   });
 };
 
+//for users to get all orders
 export const useMyOrderList = () => {
   const { session } = useAuth();
   const id = session?.user.id;
@@ -43,13 +46,14 @@ export const useMyOrderList = () => {
   });
 };
 
+//retrieves detailed information about a specific order from the Supabase database
 export const useOrderDetails = (id: number) => {
   return useQuery({
     queryKey: ['orders', id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('orders')
-        .select('*, order_items(*, products(*))')
+        .select('*, order_items(*, products(*)),profiles(*)')
         .eq('id', id)
         .single();
 
@@ -61,29 +65,36 @@ export const useOrderDetails = (id: number) => {
   });
 };
 
+
+
+//for cart
 export const useInsertOrder = () => {
   const queryClient = useQueryClient();
   const { session } = useAuth();
   const userId = session?.user.id;
 
   return useMutation({
-    async mutationFn(data: InsertTables<'orders'>) {
-      const { error, data: newProduct } = await supabase
+    async mutationFn({ schedule_time, ...data }: { schedule_time?: string } & InsertTables<'orders'>) {
+      // Ensure schedule_time is in ISO format, or set to current time if not provided
+      const formattedScheduleTime = schedule_time || new Date().toISOString();
+      
+      const { error, data: newOrder } = await supabase
         .from('orders')
-        .insert({ ...data, user_id: userId })
+        .insert({ ...data, user_id: userId, schedule_time: formattedScheduleTime })
         .select()
         .single();
 
       if (error) {
         throw new Error(error.message);
       }
-      return newProduct;
+      return newOrder;
     },
     async onSuccess() {
       await queryClient.invalidateQueries(['orders']);
     },
   });
 };
+
 
 export const useUpdateOrder = () => {
   const queryClient = useQueryClient();

@@ -25,7 +25,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
         />
 
         <Text style={styles.title}>{product.name}</Text>
-        <Text style={styles.price}>${product.price}</Text>
+        <Text style={styles.price}>Rs. {product.price}</Text>
       </Pressable>
     </Link>
   );
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     aspectRatio: 1,
+    borderRadius: 10,
   },
 
   title: {

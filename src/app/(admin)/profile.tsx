@@ -10,6 +10,8 @@ export default function Account() {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [full_name, setFull_name] = useState('');
+  const [phone_no, setPhone_no] = useState('');
+  const [address, setAddress] = useState('');
   
   const { session } = useAuth();
 
@@ -27,7 +29,7 @@ export default function Account() {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select('username, full_name')
+        .select('username, full_name, phone_no, address')
         .eq('id', session.user.id)
         .single();
         
@@ -38,6 +40,8 @@ export default function Account() {
       if (data) {
         setUsername(data.username);
         setFull_name(data.full_name);
+        setPhone_no(data.phone_no);
+        setAddress(data.address);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -51,9 +55,13 @@ export default function Account() {
   async function updateProfile({
     username,
     full_name,
+    phone_no,
+    address,
   }: {
     username: string;
     full_name: string;
+    phone_no: string;
+    address: string;
   }) {
     try {
       setLoading(true);
@@ -63,6 +71,8 @@ export default function Account() {
         id: session.user.id,
         username,
         full_name,
+        phone_no,
+        address,
         updated_at: new Date(),
       };
 
@@ -107,8 +117,24 @@ export default function Account() {
         style={styles.input}
       />
 
+      <Text style={styles.label}>Phone No</Text>
+      <TextInput
+        value={phone_no}
+        onChangeText={setPhone_no}
+        placeholder="my phone no"
+        style={styles.input}
+      />
+
+      <Text style={styles.label}>Address</Text>
+      <TextInput
+        value={address}
+        onChangeText={setAddress}
+        placeholder="my adress"
+        style={styles.input}
+      />
+
       <Button
-        onPress={() => updateProfile({ username, full_name })}
+        onPress={() => updateProfile({ username, full_name, phone_no, address })}
         disabled={loading}
         text={loading ? 'Updating profile...' : 'Update profile'}
       />

@@ -43,6 +43,10 @@ export const useInsertProduct = () => {
           name: data.name,
           image: data.image,
           price: data.price,
+          price_s: data.price_s,
+          price_l: data.price_l,
+          price_xl: data.price_xl,
+          description: data.description,
         })
         .single();
 
@@ -68,6 +72,10 @@ export const useUpdateProduct = () => {
           name: data.name,
           image: data.image,
           price: data.price,
+          price_s: data.price_s,
+          price_l: data.price_l,
+          price_xl: data.price_xl,
+          description: data.description,
         })
         .eq('id', data.id)
         .select()
@@ -86,11 +94,13 @@ export const useUpdateProduct = () => {
 };
 
 export const useDeleteProduct = () => {
+  
   const queryClient = useQueryClient();
 
   return useMutation({
     async mutationFn(id: number) {
       const { error } = await supabase.from('products').delete().eq('id', id);
+      //console.log(id);
       if (error) {
         throw new Error(error.message);
       }

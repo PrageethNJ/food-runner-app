@@ -33,10 +33,17 @@ ________________________________________________________________________________
 	npx supabase gen types typescript --project-id jckirvvbfrcpqnqrjqgk > src/database.types.ts
 14. Install expo-file-system library to upload files.
 	npx expo install expo-file-system base64-arraybuffer
-15. Install eas
+15. Install date and time picker
+	npm install react-native-modal-datetime-picker @react-native-community/datetimepicker
+	npm install dayjs-plugin-utc
+	npm install moment
+
+
+
+16. Install eas
 	npm install --global eas-cli
 	eas login
-16.
+17.
 	eas build:configure
 	eas build --platform android
 

@@ -1,3 +1,4 @@
+
 import { CartItem, Tables } from '@/types';
 import { PropsWithChildren, createContext, useContext, useState } from 'react';
 import { randomUUID } from 'expo-crypto';
@@ -12,7 +13,8 @@ type CartType = {
   addItem: (product: Product, size: CartItem['size']) => void;
   updateQuantity: (itemId: string, amount: -1 | 1) => void;
   total: number;
-  checkout: () => void;
+  //checkout: () => void;
+  checkout: (scheduledTime: string) => void; // Updated to include scheduledTime
 };
 
 const CartContext = createContext<CartType>({
@@ -20,7 +22,8 @@ const CartContext = createContext<CartType>({
   addItem: () => {},
   updateQuantity: () => {},
   total: 0,
-  checkout: () => {},
+  //checkout: () => {},
+  checkout: () => {}, // Updated to include scheduledTime
 });
 
 const CartProvider = ({ children }: PropsWithChildren) => {
@@ -66,23 +69,60 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     );
   };
 
-  const total = items.reduce(
-    (sum, item) => (sum += item.product.price * item.quantity),
-    0
-  );
+  // const total = items.reduce(
+  //   (sum, item) => (sum += item.product.price * item.quantity),
+  //   0
+  // );
+
+  const total = items.reduce((sum, item) => {
+    let itemPrice = 0;
+    
+    // Determine the price based on the size of the item
+    switch (item.size) {
+      case "S":
+        itemPrice = item.product.price_s;
+        break;
+      case "M":
+        itemPrice = item.product.price;
+        break;
+      case "L":
+        itemPrice = item.product.price_l;
+        break;
+      case "XL":
+        itemPrice = item.product.price_xl;
+        break;
+      default:
+        itemPrice = item.product.price; // Default to "M" if size is not matched
+    }
+  
+    // Add the calculated price for the current item to the sum
+    return sum + itemPrice * item.quantity;
+  }, 0);
+  
 
   const clearCart = () => {
     setItems([]);
   };
 
-  const checkout = () => {
-    insertOrder(
-      { total },
-      {
-        onSuccess: saveOrderItems,
-      }
+  /* const checkout = () => {
+     insertOrder(
+       { total },
+       {
+         onSuccess: saveOrderItems,
+       }
+     );
+   };*/
+   const checkout = (schedule_time: string) => {
+    console.log(`Selected DateTime : ${schedule_time}`);
+     insertOrder(
+       { total,schedule_time },
+       {
+         onSuccess: saveOrderItems,
+       }
     );
   };
+  
+  
 
   const saveOrderItems = (order: Tables<'orders'>) => {
     const orderItems = items.map((cartItem) => ({

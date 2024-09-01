@@ -2,7 +2,7 @@ import Button from '@/components/Button';
 import { defaultPizzaImage } from '@/components/ProductListItem';
 import Colors from '@/constants/Colors';
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import {
@@ -20,6 +20,13 @@ import { decode } from 'base64-arraybuffer';
 const CreateProductScreen = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
+
+  const [price_s, setPrice_s] = useState('');
+  const [price_l, setPrice_l] = useState('');
+  const [price_xl, setPrice_xl] = useState('');
+  const [description, setDescription] = useState('');
+
+
   const [errors, setErrors] = useState('');
   const [image, setImage] = useState<string | null>(null);
 
@@ -41,12 +48,21 @@ const CreateProductScreen = () => {
       setName(updatingProduct.name);
       setPrice(updatingProduct.price.toString());
       setImage(updatingProduct.image);
+      
+      setPrice_s(updatingProduct.price_s.toString());
+      setPrice_l(updatingProduct.price_l.toString());
+      setPrice_xl(updatingProduct.price_xl.toString());
+      setDescription(updatingProduct.description);
     }
   }, [updatingProduct]);
 
   const resetFields = () => {
     setName('');
     setPrice('');
+    setPrice_s('');
+    setPrice_l('');
+    setPrice_xl('');
+    setDescription('');
   };
 
   const validateInput = () => {
@@ -56,13 +72,44 @@ const CreateProductScreen = () => {
       return false;
     }
     if (!price) {
-      setErrors('Price is required');
+      setErrors('Price for size "M" is required');
       return false;
     }
     if (isNaN(parseFloat(price))) {
-      setErrors('Price is not a number');
+      setErrors('Price for size "M" is not a number');
       return false;
     }
+
+    if (!description) {
+      setErrors('Description is required');
+      return false;
+    }
+    if (!price_s) {
+      setErrors('Price for size "S" is required');
+      return false;
+    }
+    if (isNaN(parseFloat(price_s))) {
+      setErrors('Price for size "S" is not a number');
+      return false;
+    }
+    if (!price_l) {
+      setErrors('Price for size "L" is required');
+      return false;
+    }
+    if (isNaN(parseFloat(price_l))) {
+      setErrors('Price for size "L" is not a number');
+      return false;
+    }
+    if (!price_xl) {
+      setErrors('Price for size "XL" is required');
+      return false;
+    }
+    if (isNaN(parseFloat(price_xl))) {
+      setErrors('Price for size "XL" is not a number');
+      return false;
+    }
+
+
     return true;
   };
 
@@ -84,7 +131,7 @@ const CreateProductScreen = () => {
 
     // Save in the database
     insertProduct(
-      { name, price: parseFloat(price), image: imagePath },
+      { name, price: parseFloat(price), price_s: parseFloat(price_s), price_l: parseFloat(price_l), price_xl: parseFloat(price_xl), description, image: imagePath },
       {
         onSuccess: () => {
           resetFields();
@@ -102,7 +149,7 @@ const CreateProductScreen = () => {
     const imagePath = await uploadImage();
 
     updateProduct(
-      { id, name, price: parseFloat(price), image: imagePath },
+      { id, name, price: parseFloat(price), price_s: parseFloat(price_s), price_l: parseFloat(price_l), price_xl: parseFloat(price_xl),description, image: imagePath },
       {
         onSuccess: () => {
           resetFields();
@@ -175,6 +222,7 @@ const CreateProductScreen = () => {
       <Stack.Screen
         options={{ title: isUpdating ? 'Update Product' : 'Create Product' }}
       />
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
 
       <Image
         source={{ uri: image || defaultPizzaImage }}
@@ -192,7 +240,16 @@ const CreateProductScreen = () => {
         style={styles.input}
       />
 
-      <Text style={styles.label}>Price ($)</Text>
+      <Text style={styles.label}>Price for size "S" (Rs.)</Text>
+      <TextInput
+        value={price_s}
+        onChangeText={setPrice_s}
+        placeholder="9.99"
+        style={styles.input}
+        keyboardType="numeric"
+      />
+
+      <Text style={styles.label}>Price for size "M" (Rs.)</Text>
       <TextInput
         value={price}
         onChangeText={setPrice}
@@ -200,6 +257,34 @@ const CreateProductScreen = () => {
         style={styles.input}
         keyboardType="numeric"
       />
+
+      <Text style={styles.label}>Price for size "L" (Rs.)</Text>
+      <TextInput
+        value={price_l}
+        onChangeText={setPrice_l}
+        placeholder="9.99"
+        style={styles.input}
+        keyboardType="numeric"
+      />
+
+      <Text style={styles.label}>Price for size "XL" (Rs.)</Text>
+      <TextInput
+        value={price_xl}
+        onChangeText={setPrice_xl}
+        placeholder="9.99"
+        style={styles.input}
+        keyboardType="numeric"
+      />
+
+      <Text style={styles.label}>Description</Text>
+      <TextInput
+        value={description}
+        onChangeText={setDescription}
+        placeholder="Product description"
+        style={styles.input}
+      />
+
+    </ScrollView>
 
       <Text style={{ color: 'red' }}>{errors}</Text>
       <Button onPress={onSubmit} text={isUpdating ? 'Update' : 'Create'} />
@@ -219,6 +304,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
   },
+  scrollViewContent: {
+    paddingBottom: 0, // To ensure content is not hidden behind the buttons
+  },
   image: {
     width: '50%',
     aspectRatio: 1,
@@ -229,6 +317,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.light.tint,
     marginVertical: 10,
+
+    
   },
 
   input: {

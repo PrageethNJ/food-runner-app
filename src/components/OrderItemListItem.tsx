@@ -21,8 +21,19 @@ const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
 
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>{item.products.name}</Text>
+        
         <View style={styles.subtitleContainer}>
-          <Text style={styles.price}>${item.products.price.toFixed(2)}</Text>
+
+        <Text style={styles.price}>Rs. {(
+          item.size === 'S' ? item.products.price_s :
+          item.size === 'M' ? item.products.price :
+          item.size === 'L' ? item.products.price_l :
+          item.size === 'XL' ? item.products.price_xl : 
+          item.products.price
+          ).toFixed(2)}
+        </Text>
+          
+          
           <Text>Size: {item.size}</Text>
         </View>
       </View>
@@ -41,6 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    borderRadius: 10,
   },
   image: {
     width: 75,
