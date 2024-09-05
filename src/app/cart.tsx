@@ -6,8 +6,23 @@ import CartListItem from '@/components/CartListItem';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment'; // Replace dayjs import with moment
 import Button from '@/components/Button';
+import { useAuth } from '@/providers/AuthProvider';
+import { Redirect } from 'expo-router';
+
 
 const CartScreen = () => {
+
+  //access control part
+  const { session, isAdmin, profile} = useAuth();
+  if ((profile?.username===null) || (profile?.full_name===null) || (profile?.address===null) || (profile?.phone_no===null)) {
+    if (isAdmin) {
+      return <Redirect href={'/(admin)/profile'} />;
+      }
+    else{
+      return <Redirect href={'/(user)/profile'} />;
+      }
+  }
+
   const { items, total, checkout } = useCart();
 
   // Schedule meal
@@ -46,7 +61,7 @@ const CartScreen = () => {
       />
 
       <Text style={{ marginTop: 20, fontSize: 20, fontWeight: '500' }}>
-        Total: Rs. {total}
+        Total: Rs. {(total).toFixed(2)}
       </Text>
 
       <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>

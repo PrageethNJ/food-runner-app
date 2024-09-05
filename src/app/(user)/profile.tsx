@@ -100,6 +100,7 @@ export default function Account() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Profile' }} />
+      <Text style={styles.sectionTitle}>Enter correct data before make an order</Text>
 
       <Text style={styles.label}>User Name</Text>
       <TextInput
@@ -167,5 +168,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.light.tint,
     marginVertical: 10,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    color: '#333',
+    paddingHorizontal:5,
   },
 });

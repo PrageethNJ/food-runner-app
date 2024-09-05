@@ -25,7 +25,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
         />
 
         <Text style={styles.title}>{product.name}</Text>
-        <Text style={styles.price}>Rs. {product.price}</Text>
+        <Text style={styles.price}>Rs. {(product.price).toFixed(2)}</Text>
       </Pressable>
     </Link>
   );

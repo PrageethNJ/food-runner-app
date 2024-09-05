@@ -106,7 +106,7 @@ const ProductDetailsScreen = () => {
 
       {/* Display the dynamically calculated price */}
       <Text style={styles.sectionTitle}>Price</Text>
-      <Text style={styles.price}>Rs. {getPrice()}</Text>
+      <Text style={styles.price}>Rs. {(getPrice()).toFixed(2)}</Text>
       </ScrollView>
       <Button onPress={addToCart} text="Add to cart" />
     </View>

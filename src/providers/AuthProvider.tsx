@@ -16,6 +16,8 @@ type Profile = {
   avatar_url?: string; // Optional
   website?: string; // Optional
   group: string; // Assume 'group' is a string that could be 'ADMIN' or other roles
+  address: string;
+  phone_no: string;
 };
 
 type AuthData = {
@@ -109,4 +111,3 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 }
 
 export const useAuth = () => useContext(AuthContext);
-

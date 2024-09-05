@@ -1,0 +1,53 @@
+
+//React Query - state management
+//after installing, create query client and provide it to the rest of the screens. (query provider)
+
+import { supabase } from "@/lib/supabase";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { ActivityIndicator } from "react-native";
+
+import { View, Text } from 'react-native'
+import React from 'react'
+
+const reactQueryTest = () => {
+
+/*
+//when the component mounts want to fetch the product
+useEffect(() => {
+//create fetch product function
+const fetchProducts = async () => {
+//use supabase to query data
+  const{data, error} = await supabase.from('products').select('*');
+  console.log(data);
+  console.log(error);
+};
+fetchProducts(); //call the function
+},[]); //use effect with empty dependency array
+*/ 
+  
+//by using react query
+const {data:products, error, isLoading} = useQuery({
+  queryKey:['products'],//helps to cache the query
+  queryFn: async () => {
+    const{data, error} = await supabase.from('products').select('*');
+    if(error){
+      throw new Error(error.message);
+    }
+      return data;
+  }
+});
+  
+if (isLoading) {return <ActivityIndicator/>;}
+if (error) {return <Text>Failed to fetch products</Text>;}
+  
+  
+  
+  return (
+    <View>
+      <Text>reactQueryTest</Text>
+    </View>
+  )
+}
+
+export default reactQueryTest

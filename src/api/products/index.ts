@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
+//custom hook
 export const useProductList = () => {
   return useQuery({
     queryKey: ['products'],
@@ -14,15 +15,16 @@ export const useProductList = () => {
   });
 };
 
+
 export const useProduct = (id: number) => {
   return useQuery({
     queryKey: ['products', id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', id)
-        .single();
+        .from('products') //from products table
+        .select('*')  //select all
+        .eq('id', id) //from id column, equal to value of id
+        .single();  //take first item and return it as an object
 
       if (error) {
         throw new Error(error.message);
@@ -32,8 +34,9 @@ export const useProduct = (id: number) => {
   });
 };
 
+
 export const useInsertProduct = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient(); //get acsess to query client
 
   return useMutation({
     async mutationFn(data: any) {
@@ -55,11 +58,13 @@ export const useInsertProduct = () => {
       }
       return newProduct;
     },
+    //call this when function is sucsessfully executes
     async onSuccess() {
       await queryClient.invalidateQueries(['products']);
     },
   });
 };
+
 
 export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
@@ -92,6 +97,7 @@ export const useUpdateProduct = () => {
     },
   });
 };
+
 
 export const useDeleteProduct = () => {
   
